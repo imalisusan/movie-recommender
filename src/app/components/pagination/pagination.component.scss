@@ -1,0 +1,153 @@
+.pagination-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  flex-wrap: wrap;
+  
+  .pagination-info {
+    .results-text {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+  }
+  
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    
+    button {
+      color: rgba(255, 255, 255, 0.8);
+      border-radius: 6px;
+      
+      &:hover:not([disabled]) {
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+      }
+      
+      &[disabled] {
+        color: rgba(255, 255, 255, 0.3);
+        cursor: not-allowed;
+      }
+    }
+    
+    .page-numbers {
+      display: flex;
+      gap: 4px;
+      
+      button {
+        min-width: 40px;
+        height: 40px;
+        
+        &.current-page {
+          background: rgba(255, 255, 255, 0.2);
+          color: white;
+          font-weight: 500;
+        }
+        
+        &[disabled] {
+          cursor: default;
+          
+          &:hover {
+            background: transparent;
+          }
+        }
+      }
+    }
+  }
+  
+  .page-size-selector {
+    .page-size-field {
+      width: 100px;
+      
+      ::ng-deep {
+        .mat-mdc-form-field {
+          font-size: 14px;
+        }
+        
+        .mat-mdc-text-field-wrapper {
+          background: rgba(255, 255, 255, 0.1);
+          border-radius: 6px;
+        }
+        
+        .mat-mdc-form-field-outline {
+          color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .mat-mdc-form-field-outline-thick {
+          color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .mat-mdc-floating-label {
+          color: rgba(255, 255, 255, 0.7);
+          font-size: 12px;
+        }
+        
+        .mat-mdc-select-value {
+          color: white;
+        }
+        
+        .mat-mdc-select-arrow {
+          color: rgba(255, 255, 255, 0.7);
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .pagination-container {
+    flex-direction: column;
+    gap: 12px;
+    
+    .pagination-info {
+      order: 3;
+    }
+    
+    .pagination-controls {
+      order: 1;
+      
+      .page-numbers {
+        button {
+          min-width: 36px;
+          height: 36px;
+          font-size: 14px;
+        }
+      }
+    }
+    
+    .page-size-selector {
+      order: 2;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .pagination-container {
+    padding: 12px;
+    
+    .pagination-controls {
+      .page-numbers {
+        gap: 2px;
+        
+        button {
+          min-width: 32px;
+          height: 32px;
+          font-size: 12px;
+        }
+      }
+    }
+    
+    .page-size-selector {
+      .page-size-field {
+        width: 80px;
+      }
+    }
+  }
+}

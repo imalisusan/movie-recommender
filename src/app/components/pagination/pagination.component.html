@@ -1,0 +1,48 @@
+<div class="pagination-container">
+  <div class="pagination-info">
+    <span class="results-text">
+      Showing {{ getStartItem() }}-{{ getEndItem() }} of {{ totalResults }} results
+    </span>
+  </div>
+  
+  <div class="pagination-controls">
+    <button 
+      mat-icon-button
+      [disabled]="!hasPreviousPage"
+      (click)="onPreviousPage()"
+      aria-label="Previous page">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    
+    <div class="page-numbers">
+      <button 
+        *ngFor="let page of getVisiblePages()"
+        mat-button
+        [class.current-page]="page === currentPage"
+        [disabled]="page === '...'"
+        (click)="onPageSelect(page)"
+        [attr.aria-label]="page === '...' ? 'More pages' : 'Go to page ' + page">
+        {{ page }}
+      </button>
+    </div>
+    
+    <button 
+      mat-icon-button
+      [disabled]="!hasNextPage"
+      (click)="onNextPage()"
+      aria-label="Next page">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </div>
+  
+  <div class="page-size-selector">
+    <mat-form-field appearance="outline" class="page-size-field">
+      <mat-label>Per page</mat-label>
+      <mat-select [value]="pageSize" (selectionChange)="onPageSizeChange($event.value)">
+        <mat-option [value]="10">10</mat-option>
+        <mat-option [value]="20">20</mat-option>
+        <mat-option [value]="50">50</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+<div class="movie-list-container">
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !loading" class="error-message">
+    <mat-icon>error</mat-icon>
+    <p>{{ error }}</p>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && !error && movies.length === 0" class="empty-state">
+    <mat-icon>movie</mat-icon>
+    <h3>No movies found</h3>
+    <p>Try adjusting your search or browse different categories</p>
+  </div>
+
+  <!-- Movies Grid -->
+  <div *ngIf="!loading && !error && movies.length > 0" class="movies-grid">
+    <div *ngFor="let movie of movies" class="movie-card" (click)="onViewDetails(movie)">
+      <div class="movie-poster">
+        <img 
+          *ngIf="movie.poster_path; else posterPlaceholder"
+          [src]="'https://image.tmdb.org/t/p/w300' + movie.poster_path"
+          [alt]="movie.title"
+          loading="lazy">
+        
+        <ng-template #posterPlaceholder>
+          <div class="poster-placeholder">
+            <mat-icon>movie</mat-icon>
+          </div>
+        </ng-template>
+        
+        <button 
+          class="favorite-button"
+          [class.is-favorite]="movie.isFavorite"
+          (click)="onToggleFavorite(movie); $event.stopPropagation()"
+          [attr.aria-label]="movie.isFavorite ? 'Remove from favorites' : 'Add to favorites'">
+          <mat-icon>{{ movie.isFavorite ? 'favorite' : 'favorite_border' }}</mat-icon>
+        </button>
+      </div>
+      
+      <div class="movie-info">
+        <h3 class="movie-title">{{ movie.title }}</h3>
+        <p class="movie-year">{{ movie.release_date | date:'yyyy' }}</p>
+        <div class="movie-rating">
+          <mat-icon>star</mat-icon>
+          <span class="rating-text">{{ movie.vote_average | number:'1.1-1' }}/10</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div *ngIf="!loading && !error && movies.length > 0" class="pagination-container">
+    <app-pagination
+      [currentPage]="currentPage"
+      [totalPages]="totalPages"
+      [totalResults]="totalResults"
+      [pageSize]="pageSize"
+      [hasNextPage]="hasNextPage"
+      [hasPreviousPage]="hasPreviousPage"
+      (pageChange)="onPageChange($event)"
+      (pageSizeChange)="onPageSizeChange($event)">
+    </app-pagination>
+  </div>
+</div>

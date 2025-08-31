@@ -1,0 +1,31 @@
+<div class="search-container">
+  <mat-form-field class="search-field" appearance="outline">
+    <mat-label>Search movies...</mat-label>
+    <input 
+      matInput 
+      [(ngModel)]="searchQuery"
+      (keyup.enter)="onSearch()"
+      placeholder="Enter movie title"
+      autocomplete="off">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+  
+  <div class="search-actions">
+    <button 
+      mat-raised-button 
+      color="primary"
+      (click)="onSearch()"
+      [disabled]="!searchQuery?.trim()">
+      <mat-icon>search</mat-icon>
+      Search
+    </button>
+    
+    <button 
+      *ngIf="searchQuery"
+      mat-button
+      (click)="onClear()">
+      <mat-icon>clear</mat-icon>
+      Clear
+    </button>
+  </div>
+</div>
