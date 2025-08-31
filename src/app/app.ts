@@ -8,6 +8,7 @@ import { MovieListComponent } from './components/movie-list/movie-list.component
 import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
 import { SearchComponent } from './components/search/search.component';
 import { AuthComponent } from './components/auth/auth.component';
+import { LoaderComponent } from './components/loader/loader.component';
 import { TmdbService, Movie, MovieDetails, Cast, Crew, TMDBResponse } from './services/tmdb.service';
 import { AuthService } from './services/auth.service';
 import { MovieStateService } from './services/movie-state.service';
@@ -25,7 +26,8 @@ import { Subject, takeUntil, Observable } from 'rxjs';
     MovieListComponent,
     MovieDetailsComponent,
     SearchComponent,
-    AuthComponent
+    AuthComponent,
+    LoaderComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -42,6 +44,9 @@ export class App implements OnInit, OnDestroy {
   selectedMovieDetails: MovieDetails | null = null;
   selectedMovieCast: Cast[] = [];
   selectedMovieCrew: Crew[] = [];
+  
+  // Search state
+  lastSearchQuery: string = '';
   
   // UI state
   loading: boolean = false;
@@ -141,13 +146,22 @@ export class App implements OnInit, OnDestroy {
     }
   }
   
-  async onSearch(query: string): Promise<void> {
+  async onSearch(query: string, page: number = 1): Promise<void> {
     this.loading = true;
     this.error = null;
-    this.currentPage = 1;
+    
+    // Only reset page to 1 if it's a new search query
+    if (query !== this.lastSearchQuery) {
+      this.currentPage = 1;
+      page = 1;
+    } else {
+      this.currentPage = page;
+    }
+    
+    this.lastSearchQuery = query;
     
     try {
-      const response = await this.tmdbService.searchMovies(query, this.currentPage).toPromise();
+      const response = await this.tmdbService.searchMovies(query, page).toPromise();
       if (response) {
         this.searchResults = response.results;
         this.totalPages = Math.min(response.total_pages, 500);
@@ -163,6 +177,7 @@ export class App implements OnInit, OnDestroy {
   
   onClearSearch(): void {
     this.searchResults = [];
+    this.lastSearchQuery = '';
     this.currentPage = 1;
     this.totalPages = 1;
     this.totalResults = 0;
@@ -170,10 +185,9 @@ export class App implements OnInit, OnDestroy {
   
   async onPageChange(page: number): Promise<void> {
     this.currentPage = page;
-    if (this.currentView === 'search' && this.searchResults.length > 0) {
+    if (this.currentView === 'search' && this.lastSearchQuery) {
       // Re-run search with new page
-      const lastQuery = ''; // You might want to store the last search query
-      await this.onSearch(lastQuery);
+      await this.onSearch(this.lastSearchQuery, page);
     } else {
       await this.loadMovies();
     }

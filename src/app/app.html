@@ -60,8 +60,19 @@
         (clear)="onClearSearch()">
       </app-search>
       
+      <!-- Loading state for search -->
+      <div *ngIf="loading && lastSearchQuery && searchResults.length === 0" class="search-loading">
+        <app-loader
+          [size]="60"
+          [message]="'Searching movies...'"
+          [subtitle]="'Finding the best matches for &quot;' + lastSearchQuery + '&quot;'"
+          [icon]="'search'">
+        </app-loader>
+      </div>
+      
+      <!-- Search results -->
       <div *ngIf="searchResults.length > 0" class="search-results">
-        <h2>Search Results</h2>
+        <h2>Search Results for "{{ lastSearchQuery }}"</h2>
         <app-movie-list
           [movies]="searchResults"
           [loading]="loading"
@@ -75,6 +86,19 @@
           (pageChange)="onPageChange($event)"
           (pageSizeChange)="onPageSizeChange($event)">
         </app-movie-list>
+      </div>
+      
+      <!-- No results state -->
+      <div *ngIf="!loading && lastSearchQuery && searchResults.length === 0 && !error" class="no-results">
+        <div class="empty-state">
+          <mat-icon class="empty-icon">search_off</mat-icon>
+          <h3>No movies found</h3>
+          <p>We couldn't find any movies matching "{{ lastSearchQuery }}"</p>
+          <p class="empty-subtitle">Try searching with different keywords or check your spelling</p>
+          <button mat-raised-button color="primary" (click)="onClearSearch()">
+            Clear Search
+          </button>
+        </div>
       </div>
     </div>
 
@@ -151,6 +175,16 @@
       </div>
     </div>
   </main>
+  
+  <!-- Loading Overlay for Pagination -->
+  <app-loader
+    *ngIf="loading && (currentPage > 1 || (currentView === 'search' && searchResults.length > 0))"
+    [overlay]="true"
+    [size]="50"
+    [message]="currentView === 'search' ? 'Loading search results...' : 'Loading movies...'"
+    [subtitle]="'Page ' + currentPage"
+    [icon]="currentView === 'search' ? 'search' : 'movie'">
+  </app-loader>
   
   <!-- Authentication Modal -->
   <div *ngIf="showAuthModal" class="auth-overlay" (click)="hideAuthForm()">
