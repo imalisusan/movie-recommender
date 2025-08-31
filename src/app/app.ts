@@ -7,6 +7,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MovieListComponent } from './components/movie-list/movie-list.component';
 import { MovieDetailsComponent } from './components/movie-details/movie-details.component';
 import { SearchComponent } from './components/search/search.component';
+import { AuthComponent } from './components/auth/auth.component';
 import { TmdbService, Movie, MovieDetails, Cast, Crew, TMDBResponse } from './services/tmdb.service';
 import { AuthService } from './services/auth.service';
 import { MovieStateService } from './services/movie-state.service';
@@ -23,7 +24,8 @@ import { Subject, takeUntil, Observable } from 'rxjs';
     MatMenuModule,
     MovieListComponent,
     MovieDetailsComponent,
-    SearchComponent
+    SearchComponent,
+    AuthComponent
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss'
@@ -55,6 +57,7 @@ export class App implements OnInit, OnDestroy {
   
   // Authentication
   isAuthenticated: boolean = false;
+  showAuthModal: boolean = false;
   
   movieCategories = [
     { key: 'popular', label: 'Popular' },
@@ -72,13 +75,16 @@ export class App implements OnInit, OnDestroy {
   ) {}
   
   ngOnInit(): void {
-    this.loadMovies();
-    this.loadFavorites();
-    
-    // Subscribe to auth state
+    // Subscribe to authentication state
     this.authService.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
       this.isAuthenticated = !!user;
+      this.showAuthModal = false; // Hide auth modal when user state changes
+      if (this.isAuthenticated) {
+        this.loadFavorites();
+      }
     });
+    
+    this.loadMovies();
   }
   
   ngOnDestroy(): void {
@@ -251,14 +257,12 @@ export class App implements OnInit, OnDestroy {
     }
   }
   
-  async signIn(): Promise<void> {
-    try {
-      // For demo purposes, using a placeholder email/password
-      // In a real app, you'd have a proper sign-in form
-      await this.authService.signIn('demo@example.com', 'password123');
-    } catch (error) {
-      console.error('Sign in failed:', error);
-    }
+  showAuthForm(): void {
+    this.showAuthModal = true;
+  }
+  
+  hideAuthForm(): void {
+    this.showAuthModal = false;
   }
   
   async signOut(): Promise<void> {

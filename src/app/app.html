@@ -33,7 +33,7 @@
           *ngIf="!isAuthenticated"
           mat-raised-button 
           color="primary"
-          (click)="signIn()">
+          (click)="showAuthForm()">
           <mat-icon>login</mat-icon>
           Sign In
         </button>
@@ -151,4 +151,14 @@
       </div>
     </div>
   </main>
+  
+  <!-- Authentication Modal -->
+  <div *ngIf="showAuthModal" class="auth-overlay" (click)="hideAuthForm()">
+    <div class="auth-modal" (click)="$event.stopPropagation()">
+      <button mat-icon-button class="close-button" (click)="hideAuthForm()">
+        <mat-icon>close</mat-icon>
+      </button>
+      <app-auth></app-auth>
+    </div>
+  </div>
 </div>
