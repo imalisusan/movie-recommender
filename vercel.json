@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "movie-recommender",
   "buildCommand": "npm run build:prod",
   "outputDirectory": "dist/movie-recommender/browser",
   "framework": "angular",
