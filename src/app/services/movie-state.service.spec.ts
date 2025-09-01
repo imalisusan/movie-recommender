@@ -348,7 +348,7 @@ describe('MovieStateService', () => {
   describe('Observable Selectors', () => {
     it('should emit state changes through observables', () => {
       let movieCount = 0;
-      let loadingStates: boolean[] = [];
+      const loadingStates: boolean[] = [];
       
       service.movies$.subscribe(movies => {
         movieCount = movies.length;

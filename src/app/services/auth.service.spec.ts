@@ -60,6 +60,33 @@ describe('AuthService', () => {
     mockSignOut.and.returnValue(Promise.resolve());
     mockAuthState.and.returnValue(userSubject.asObservable());
 
+    // Replace the existing mock setup with proper Firebase v9+ mocking
+    jest.mock('@angular/fire/auth', () => ({
+      signInWithEmailAndPassword: jest.fn(),
+      createUserWithEmailAndPassword: jest.fn(),
+      signOut: jest.fn(),
+      user: jest.fn()
+    }));
+    
+    import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, user } from '@angular/fire/auth';
+    
+    const mockSignInWithEmailAndPassword = signInWithEmailAndPassword as jest.MockedFunction<typeof signInWithEmailAndPassword>;
+    const mockCreateUserWithEmailAndPassword = createUserWithEmailAndPassword as jest.MockedFunction<typeof createUserWithEmailAndPassword>;
+    const mockSignOut = signOut as jest.MockedFunction<typeof signOut>;
+    const mockUser = user as jest.MockedFunction<typeof user>;
+
+    // Reset all mocks
+    mockSignInWithEmailAndPassword.mockReset();
+    mockCreateUserWithEmailAndPassword.mockReset();
+    mockSignOut.mockReset();
+    mockUser.mockReset();
+    
+    // Setup default return values
+    mockSignInWithEmailAndPassword.mockResolvedValue({ user: mockUserCredential.user } as any);
+    mockCreateUserWithEmailAndPassword.mockResolvedValue({ user: mockUserCredential.user } as any);
+    mockSignOut.mockResolvedValue();
+    mockUser.mockReturnValue(userSubject.asObservable());
+    
     TestBed.configureTestingModule({
       providers: [
         AuthService,

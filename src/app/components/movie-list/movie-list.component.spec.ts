@@ -90,7 +90,8 @@ describe('MovieListComponent', () => {
       'setMovies',
       'appendMovies',
       'setCurrentPage',
-      'setSelectedMovie'
+      'setSelectedMovie',
+      'setCategory'  // Add this missing method
     ], {
       state$: mockStateSubject.asObservable(),
       movies$: of(mockMovies),

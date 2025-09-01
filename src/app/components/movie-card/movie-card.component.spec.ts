@@ -233,9 +233,15 @@ describe('MovieCardComponent', () => {
 
   describe('Utility Methods', () => {
     it('should get poster URL correctly', () => {
-      const posterUrl = component.getPosterUrl();
-      expect(posterUrl).toBe('https://image.tmdb.org/t/p/w500/test-poster.jpg');
-      expect(mockTmdbService.getPosterUrl).toHaveBeenCalledWith(mockMovie.poster_path);
+      const posterPath = '/test-poster.jpg';
+      const expectedUrl = 'https://image.tmdb.org/t/p/w500/test-poster.jpg';
+      
+      tmdbServiceSpy.getPosterUrl.and.returnValue(expectedUrl);
+      
+      const result = component.getPosterUrl(posterPath);
+      
+      expect(result).toBe(expectedUrl);
+      expect(tmdbServiceSpy.getPosterUrl).toHaveBeenCalledWith(posterPath, 'w500'); // Expect both arguments
     });
 
     it('should return fallback image when no poster_path', () => {

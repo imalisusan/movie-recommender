@@ -220,8 +220,14 @@ export class MovieCardComponent {
   
   formatReleaseDate(dateString: string): string {
     if (!dateString) return '';
+    
     const date = new Date(dateString);
-    return date.getFullYear().toString();
+    const options: Intl.DateTimeFormatOptions = { 
+      year: 'numeric', 
+      month: 'long' 
+    };
+    
+    return date.toLocaleDateString('en-US', options);
   }
   
   truncateOverview(overview: string): string {
