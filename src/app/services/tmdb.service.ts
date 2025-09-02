@@ -94,15 +94,12 @@ export class TmdbService {
   private readonly imageBaseUrl = environment.tmdbImageBaseUrl;
   private readonly apiKey = environment.tmdbApiKey;
   
-  // Simple in-memory cache
   private cache = new Map<string, any>();
-  private readonly cacheExpiry = 5 * 60 * 1000; // 5 minutes
+  private readonly cacheExpiry = 5 * 60 * 1000;
 
   constructor(private http: HttpClient) {}
 
-  /**
-   * Get popular movies
-   */
+
   getPopularMovies(page: number = 1): Observable<TMDBResponse<Movie>> {
     const cacheKey = `popular_movies_${page}`;
     const cached = this.getFromCache(cacheKey);

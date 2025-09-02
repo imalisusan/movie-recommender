@@ -202,7 +202,7 @@ describe('MovieDetailsComponent', () => {
       const metaItems = fixture.debugElement.queryAll(By.css('.meta-item'));
       expect(metaItems.length).toBeGreaterThan(0);
 
-      // Check release date
+
       const dateItem = metaItems.find(item => 
         item.nativeElement.textContent.includes('January')
       );
@@ -366,7 +366,7 @@ describe('MovieDetailsComponent', () => {
       ];
 
       const keyCrew = component.getKeyCrew();
-      expect(keyCrew.length).toBe(2); // Only Director and Producer
+      expect(keyCrew.length).toBe(2);
       expect(keyCrew[0].job).toBe('Director');
       expect(keyCrew[1].job).toBe('Producer');
     });

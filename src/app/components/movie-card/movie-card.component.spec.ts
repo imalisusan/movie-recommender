@@ -56,7 +56,6 @@ describe('MovieCardComponent', () => {
     compiled = fixture.nativeElement as HTMLElement;
     mockTmdbService = TestBed.inject(TmdbService) as jasmine.SpyObj<TmdbService>;
 
-    // Set required input
     component.movie = mockMovie;
     fixture.detectChanges();
   });
@@ -241,7 +240,7 @@ describe('MovieCardComponent', () => {
       const result = component.getPosterUrl(posterPath);
       
       expect(result).toBe(expectedUrl);
-      expect(tmdbServiceSpy.getPosterUrl).toHaveBeenCalledWith(posterPath, 'w500'); // Expect both arguments
+      expect(tmdbServiceSpy.getPosterUrl).toHaveBeenCalledWith(posterPath, 'w500');
     });
 
     it('should return fallback image when no poster_path', () => {

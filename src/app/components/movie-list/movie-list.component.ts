@@ -219,7 +219,7 @@ export class MovieListComponent implements OnInit, OnDestroy {
   @Output() pageSizeChange = new EventEmitter<number>();
   
   private destroy$ = new Subject<void>();
-  private favorites = new Set<number>(); // Simple in-memory favorites
+  private favorites = new Set<number>();
   
   constructor(
     private tmdbService: TmdbService,
@@ -239,7 +239,6 @@ export class MovieListComponent implements OnInit, OnDestroy {
   }
   
   private subscribeToState(): void {
-    // Subscribe to all relevant state changes
     combineLatest([
       this.movieState.movies$,
       this.movieState.loading$,

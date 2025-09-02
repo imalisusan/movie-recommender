@@ -269,7 +269,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.loadRecentSearches();
     
-    // Auto-search with debounce
+
     this.searchControl.valueChanges
       .pipe(
         debounceTime(500),
@@ -321,13 +321,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
   
   private addToRecentSearches(searchTerm: string): void {
-    // Remove if already exists
     this.recentSearches = this.recentSearches.filter(term => term !== searchTerm);
     
-    // Add to beginning
     this.recentSearches.unshift(searchTerm);
     
-    // Keep only last 5 searches
     this.recentSearches = this.recentSearches.slice(0, 5);
     
     this.saveRecentSearches();

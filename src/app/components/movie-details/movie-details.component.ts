@@ -365,7 +365,6 @@ export class MovieDetailsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   
   ngOnInit(): void {
-    // Component initialization logic if needed
   }
   
   ngOnDestroy(): void {

@@ -36,7 +36,6 @@ export class App implements OnInit, OnDestroy {
   currentView: 'movies' | 'search' | 'favorites' = 'movies';
   selectedCategory: string = 'popular';
   
-  // Movie data
   movies: Movie[] = [];
   searchResults: Movie[] = [];
   favorites: Movie[] = [];
@@ -45,22 +44,18 @@ export class App implements OnInit, OnDestroy {
   selectedMovieCast: Cast[] = [];
   selectedMovieCrew: Crew[] = [];
   
-  // Search state
   lastSearchQuery: string = '';
   
-  // UI state
   loading: boolean = false;
   error: string | null = null;
   movieDetailsLoading: boolean = false;
   movieDetailsError: string | null = null;
   
-  // Pagination
   currentPage: number = 1;
   totalPages: number = 1;
   totalResults: number = 0;
   pageSize: number = 20;
   
-  // Authentication
   isAuthenticated: boolean = false;
   showAuthModal: boolean = false;
   
@@ -80,10 +75,9 @@ export class App implements OnInit, OnDestroy {
   ) {}
   
   ngOnInit(): void {
-    // Subscribe to authentication state
     this.authService.user$.pipe(takeUntil(this.destroy$)).subscribe(user => {
       this.isAuthenticated = !!user;
-      this.showAuthModal = false; // Hide auth modal when user state changes
+      this.showAuthModal = false;
       if (this.isAuthenticated) {
         this.loadFavorites();
       }
@@ -120,7 +114,7 @@ export class App implements OnInit, OnDestroy {
       const response = await this.getMoviesByCategory(this.selectedCategory, this.currentPage).toPromise();
       if (response) {
         this.movies = response.results;
-        this.totalPages = Math.min(response.total_pages, 500); // TMDB limits to 500 pages
+        this.totalPages = Math.min(response.total_pages, 500);
         this.totalResults = response.total_results;
       }
     } catch (error) {
@@ -150,7 +144,7 @@ export class App implements OnInit, OnDestroy {
     this.loading = true;
     this.error = null;
     
-    // Only reset page to 1 if it's a new search query
+
     if (query !== this.lastSearchQuery) {
       this.currentPage = 1;
       page = 1;
@@ -186,7 +180,6 @@ export class App implements OnInit, OnDestroy {
   async onPageChange(page: number): Promise<void> {
     this.currentPage = page;
     if (this.currentView === 'search' && this.lastSearchQuery) {
-      // Re-run search with new page
       await this.onSearch(this.lastSearchQuery, page);
     } else {
       await this.loadMovies();
